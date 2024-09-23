@@ -29,7 +29,7 @@ export default function AdminView() {
   const fetchMatchData = async () => {
     try {
       const response = await fetch(
-        "https://crickscore-1093.onrender.com//api/scores/match"
+        "https://crickscore-1093.onrender.com/api/scores/match"
       );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
