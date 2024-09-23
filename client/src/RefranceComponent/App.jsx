@@ -1,14 +1,11 @@
-import React, {useState, useEffect} from "react";
-import io from 'socket.io-client';
+import React, { useEffect, useState } from "react";
 // import AdminView from "./components/AdminView";
 // import UserView from "./components/UserView";
 // import OverControl from "./components/OverControl";
 // import OverListing from "./components/OverListing";
 
-
-// const socket = io('http://localhost:5000');
-const url = "http://localhost:5000";
-
+// const socket = io('http://localhost:5001');
+const url = "http://localhost:5001";
 
 function App() {
   const [completedOvers, setCompletedOvers] = useState([]);
@@ -25,9 +22,9 @@ function App() {
   const updateScore = async (runs) => {
     try {
       const response = await fetch(`${url}/api/scores/update`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           runs: 5,
@@ -37,9 +34,8 @@ function App() {
         }),
       });
       console.log(response);
-      const result = await response.json()
+      const result = await response.json();
       console.log(result);
-
 
       if (response.ok) {
         const updatedScore = await response.json();
@@ -54,10 +50,10 @@ function App() {
         // TODO:
         // Add logic to handle completed overs if necessary
       } else {
-        console.error('Failed to update score');
+        console.error("Failed to update score");
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
 
