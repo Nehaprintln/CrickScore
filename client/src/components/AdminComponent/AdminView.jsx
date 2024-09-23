@@ -29,7 +29,7 @@ export default function AdminView() {
   const fetchMatchData = async () => {
     try {
       const response = await fetch(
-        "https://cric-score-tgwv.onrender.com//api/scores/match"
+        "https://crickscore-1093.onrender.com//api/scores/match"
       );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -75,7 +75,7 @@ export default function AdminView() {
     }
     try {
       const response = await fetch(
-        `https://cric-score-tgwv.onrender.com/api/scores/match`,
+        `https://crickscore-1093.onrender.com/api/scores/match`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
