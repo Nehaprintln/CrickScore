@@ -47,15 +47,13 @@ io.on("connection", (socket) => {
   });
 });
 
-// Serve the static files from the React app (build folder)
 app.use(express.static(path.join(__dirname, "./client/build")));
 
-// Serve the index.html for any unknown routes, enabling client-side routing
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "./client/build", "index.html"));
 });
 
-// Start the server
+// Start the server on port
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
