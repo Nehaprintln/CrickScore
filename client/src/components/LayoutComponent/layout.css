@@ -1,0 +1,32 @@
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #f7f9fc;
+    /* min-height: 100vh; */
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+}
+.layout-container{
+    max-width: 1200px;
+    width: 370px;
+    height: 800px;
+    margin:50px auto;
+    padding: 20px;
+    background-color: white; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    overflow: hidden;
+    overflow-y: scroll;
+    clip-path: inset(0 round 20px);
+    border: 1px solid rgb(35, 34, 34);
+}
+::-webkit-scrollbar{
+    width: 8px;
+    
+}
+::-webkit-scrollbar-thumb{
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+}
+ 

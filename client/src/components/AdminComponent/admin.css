@@ -1,0 +1,168 @@
+
+.balls-div{
+  border: 1px solid #111;
+  height: 70px;
+}
+.balls-container .ball {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 8.5px;
+  background-color: #ece9e9;
+  border: 0.5px solid gray;
+  }
+  .balls-container{
+    position: relative; 
+  }
+  .admin .ball{
+    cursor: pointer;
+  }
+  
+  .ball.active {
+    border: 2px solid blue;
+    box-shadow: 0.3px 0.3px 4px blue;
+    animation: spin 1s infinite;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+ 
+  .ball-options button {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    padding: 9px;
+    border-radius: 50%;
+    border: 0.5px solid #878585;
+    cursor: pointer;
+    font-size: 13px;
+    /* font-weight: bold; */
+  }
+  
+  .ball-options button:nth-child(1) { 
+    background-color: transparent;
+    border: 0.5px solid gray;
+  }
+  .ball-options button:nth-child(2),
+.ball-options button:nth-child(3),
+.ball-options button:nth-child(4) {
+  background-color: #b8b7b7;
+  color: white;
+}
+.ball-options button:nth-child(5) { 
+  background-color: #64dbd1;
+  color: white;
+}
+.ball-options button:nth-child(6) { 
+  background-color: #119e71;
+  color: white;
+}
+.ball-options button:nth-child(7) { 
+  background-color: #f1361d;
+  color: white;
+}
+
+
+.balls-container .ball.run-0 {
+  background-color: transparent;
+}
+
+.balls-container .ball.run-1,
+.balls-container .ball.run-2,
+.balls-container .ball.run-3 {
+  background-color: #b8b7b7;
+  color: white;
+}
+
+.balls-container .ball.run-4 {
+  background-color: #64dbd1;
+  color: white;
+}
+
+.balls-container .ball.run-6 {
+  background-color: #119e71;
+  color: white;
+}
+
+.balls-container .ball.wicket {
+  background-color: #f1361d;
+  color: white;
+}
+.over-run-container{
+  position: relative;
+}
+.run-ball-display{
+  position: absolute;
+  left: 40%;
+  text-align: right;
+}
+.ball-para{
+  margin: 0;
+  padding-top: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.ball-options{
+  width: 200px;
+  border: 1px dotted red;
+  border-radius: 5px;
+}
+
+.overs-layout{
+  margin-top: 150px;
+}
+.overs-layout h4{
+  font-size: 16px;
+  margin-bottom: -5px;
+  padding: 0;
+}
+.over-listing{
+  display: flex;
+  justify-content: space-around;
+  /* gap: 10px; */
+}
+.overs-label{
+  width: 10%;
+  margin-top: 10px;
+  margin-left: -3px;
+  /* border: 1px solid red; */
+  font-weight: 500;
+
+}
+.runs-label{
+  width: 80%;
+  margin-top: 10px;
+  margin-left: 20px;
+  font-weight: 500;
+  /* border: 1px solid red; */
+}
+.overs-summary{
+  margin-top: -15px;
+}
+.scores-display{
+text-align: center;
+}
+
+.scores-wicket-display{
+  margin-top: -0.5px;
+  
+}
+.ovres-display{
+  margin-top: -25px;
+}
+.current-over-title{
+  margin-bottom: 8px;
+}
+.balls-container p{
+  font-size: 16px;
+  font-weight: 700;
+}
