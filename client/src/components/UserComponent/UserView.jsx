@@ -1,11 +1,15 @@
 import React, { useEffect, useContext } from 'react'
 import { ScoreContext } from '../ScoreComponents/ScoreContext';
 import Layout from '../LayoutComponent/Layout';
+import io from 'socket.io-client';
 // import '../AdminComponent/adnim.css';
 
 
 export default function UserView() {
     const {score, setScore, wickets, setWickets, over, setOver, currentBall, setCurrentBall, balls, setBalls, oversData, setOversData} = useContext(ScoreContext);
+    const socket = io('http://localhost:5000');
+
+
 
     const fetchMatchData = async () => {
         try {
@@ -23,7 +27,27 @@ export default function UserView() {
     };
 
     useEffect(() => {
+        
         fetchMatchData();
+        socket.on('dataUpdate', (updatedData) => {
+            setScore(updatedData.score);
+            setWickets(updatedData.wickets);
+            setOver(updatedData.currentOver);
+            setCurrentBall(updatedData.currentBall);
+            setBalls(updatedData.overs[updatedData.currentOver]?.balls || []);
+            setOversData(updatedData.overs);
+            console.log('Received updated data:', updatedData);
+            
+            // setData(updatedData);
+            
+            });
+            // Cleanup on component unmount
+            
+            return () => {
+            
+            socket.off('dataUpdate');
+            
+            };
     }, []);
     return (
         <Layout>

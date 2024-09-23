@@ -36,27 +36,10 @@ const getMatchScore = async (req, res) => {
     // Fetch match data
     // TODO:
     if (!match) {
-      // const newMatch = new Match({
-      //   score: 0,
-      //   wickets: 0,
-      //   overs: [{
-      //     balls: [
-      //       { run: 1, isWicket: false },
-      //       { run: 0, isWicket: false }
-      //     ]
-      //   }],
-      //   currentOver: 0,
-      //   currentBall: 0
-      // });
-      
-      // await newMatch.save();
-      
-
-
       match = new Match({
         score: 0,
         wickets: 0,
-        overs: [{ balls: [] }], // Initialize overs with an empty array for balls
+        overs: [{ balls: [] }],
         currentOver: 0,
         currentBall: 0,
       });
@@ -126,6 +109,9 @@ const updateScore = async(req, res) => {
     // match.overs[currentOver].balls = balls;
 
     await match.save();
+    console.log(JSON.stringify(req.app) +"req app");
+    req.app.get('io').emit('dataUpdate', match); 
+    
     // res.send(match);
      res.status(200).json(match); //TODO: 21.
   } catch (error) {

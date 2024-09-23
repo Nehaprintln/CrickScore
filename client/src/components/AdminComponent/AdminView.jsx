@@ -8,9 +8,9 @@ export default function AdminView() {
     setBalls, oversData, setOversData} = useContext(ScoreContext);
 
   const [showOptions, setShowOptions] = useState(false); // Show options on ball click
-//   const [isSticky, setIsSticky] = useState(false);
-  const url = "http://localhost:5000";
-  const ballOptionsRef = useRef();
+//   const url = "http://localhost:5000";
+    const url = process.env.URL;  
+     const ballOptionsRef = useRef();
   //   console.log({score})
   //   console.log(oversData);
 
