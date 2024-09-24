@@ -219,7 +219,7 @@ export default function AdminView() {
             )}
           </div>
         </div>
-        <div className="overs-layout">
+        {/* <div className="overs-layout">
           <h4>Over Listings</h4>
           <div className="over-listing">
             <p className="overs-label">Overs</p>
@@ -228,7 +228,7 @@ export default function AdminView() {
           <div className="overs-summary">
             {oversData
               .slice(0, -1)
-              .reverse()
+              // .reverse()
               .map((over, index) => (
                 <div
                   key={index}
@@ -248,7 +248,7 @@ export default function AdminView() {
                       margin: "6px 0",
                     }}
                   >
-                    {oversData.length - 1 - index}
+                    {++index}
                   </div>
                   <div
                     style={{
@@ -295,7 +295,90 @@ export default function AdminView() {
                 </div>
               ))}
           </div>
-        </div>
+        </div> */}
+        <div className="overs-layout">
+  {oversData && oversData.length > 1 && (
+    <>
+      <h4>Over Listings</h4>
+      <div className="over-listing">
+        <p className="overs-label">Overs</p>
+        <p className="runs-label">Runs</p>
+      </div>
+    </>
+  )}
+  
+  <div className="overs-summary">
+            {oversData
+              .slice(0, -1)
+              // .reverse()
+              .map((over, index) => (
+                <div
+                  key={index}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-around",
+                    gap: "20px",
+                    marginBottom: "5px",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "15%",
+                      height: "40px",
+                      textAlign: "center",
+                      paddingTop: "8px",
+                      margin: "6px 0",
+                    }}
+                  >
+                    {++index}
+                  </div>
+                  <div
+                    style={{
+                      width: "80%",
+                      height: "40px",
+                      textAlign: "center",
+                      padding: "5px 7px",
+                      display: "flex",
+                      gap: "10px",
+                      border: "1px solid gray",
+                      margin: "5px",
+                      height: "40px",
+                    }}
+                  >
+                    {over.balls.map((ball, i) => (
+                      <div
+                        key={i}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          width: "35px",
+                          height: "35px",
+                          border: "0.5px solid gray",
+                          borderRadius: "50%",
+                          backgroundColor: ball.isWicket
+                            ? "#f1361d"
+                            : ball.run === 0
+                            ? "white"
+                            : ball.run === 1 || ball.run === 2 || ball.run === 3
+                            ? "#b8b7b7"
+                            : ball.run === 4
+                            ? "#64dbd1"
+                            : ball.run === 6
+                            ? "#119e71"
+                            : "transparent",
+                          color: ball.run === 0 ? "black" : "white",
+                        }}
+                      >
+                        {ball.isWicket ? "W" : ball.run}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+          </div>
+ </div>
+
       </div>
     </Layout>
   );
