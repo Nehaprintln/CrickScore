@@ -2,9 +2,9 @@ import React, { useContext, useEffect } from "react";
 import io from "socket.io-client";
 import Layout from "../LayoutComponent/Layout";
 import { ScoreContext } from "../ScoreComponents/ScoreContext";
-// import '../AdminComponent/adnim.css';
 
 export default function UserView() {
+  const socket = io("https://crickscore-1093.onrender.com/");
   const {
     score,
     setScore,
@@ -19,7 +19,6 @@ export default function UserView() {
     oversData,
     setOversData,
   } = useContext(ScoreContext);
-  const socket = io("https://crickscore-1093.onrender.com/");
 
   const fetchMatchData = async () => {
     try {
@@ -40,18 +39,14 @@ export default function UserView() {
 
   useEffect(() => {
     fetchMatchData();
-    socket.on("dataUpdate", (updatedData) => {
+      socket.on("dataUpdate", (updatedData) => {
       setScore(updatedData.score);
       setWickets(updatedData.wickets);
       setOver(updatedData.currentOver);
       setCurrentBall(updatedData.currentBall);
       setBalls(updatedData.overs[updatedData.currentOver]?.balls || []);
       setOversData(updatedData.overs);
-      console.log("Received updated data:", updatedData);
-
-      // setData(updatedData);
     });
-    // Cleanup on component unmount
 
     return () => {
       socket.off("dataUpdate");
@@ -67,7 +62,6 @@ export default function UserView() {
             </h1>
 
             <h4 className="ovres-display">
-              {/* If currentBall is 6, show next over with ball 0 */}
               Over (
               {currentBall === 6 ? `${over + 1}.0` : `${over}.${currentBall}`})
             </h4>
@@ -81,7 +75,6 @@ export default function UserView() {
                   <div
                     key={i}
                     style={{ cursor: "default" }}
-                    //   className={`ball ${i === currentBall ? 'active' : ''}`}
                     className={`ball ${
                       balls[i]
                         ? balls[i].isWicket
@@ -123,81 +116,84 @@ export default function UserView() {
             </div>
           </div>
         </div>
+        <div className="animation-div"></div>
         <div className="overs-layout">
-          <h4>Over Listings</h4>
-          <div className="over-listing">
-            <p className="overs-label">Overs</p>
-            <p className="runs-label">Runs</p>
-          </div>
+          {oversData && oversData.length > 1 && (
+            <>
+              <h4>Over Listings</h4>
+              <div className="over-listing">
+                <p className="overs-label">Overs</p>
+                <p className="runs-label">Runs</p>
+              </div>
+            </>
+          )}
+
           <div className="overs-summary">
-            {oversData
-              .slice(0, -1)
-              .reverse()
-              .map((over, index) => (
+            {oversData.slice(0, -1).map((over, index) => (
+              <div
+                key={index}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-around",
+                  gap: "20px",
+                  marginBottom: "5px",
+                }}
+              >
                 <div
-                  key={index}
                   style={{
-                    display: "flex",
-                    justifyContent: "space-around",
-                    gap: "20px",
-                    marginBottom: "5px",
+                    width: "15%",
+                    height: "40px",
+                    textAlign: "center",
+                    paddingTop: "8px",
+                    margin: "6px 0",
                   }}
                 >
-                  <div
-                    style={{
-                      width: "15%",
-                      height: "40px",
-                      textAlign: "center",
-                      paddingTop: "8px",
-                      margin: "6px 0",
-                    }}
-                  >
-                    {oversData.length - 1 - index}
-                  </div>
-                  <div
-                    style={{
-                      width: "80%",
-                      height: "40px",
-                      textAlign: "center",
-                      padding: "5px 7px",
-                      display: "flex",
-                      gap: "10px",
-                      border: "1px solid gray",
-                      margin: "5px",
-                      height: "40px",
-                    }}
-                  >
-                    {over.balls.map((ball, i) => (
-                      <div
-                        key={i}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          width: "35px",
-                          height: "35px",
-                          border: "0.5px solid gray",
-                          borderRadius: "50%",
-                          backgroundColor: ball.isWicket
-                            ? "#f1361d"
-                            : ball.run === 0
-                            ? "white"
-                            : ball.run === 1 || ball.run === 2 || ball.run === 3
-                            ? "#b8b7b7"
-                            : ball.run === 4
-                            ? "#64dbd1"
-                            : ball.run === 6
-                            ? "#119e71"
-                            : "transparent",
-                          color: ball.run === 0 ? "black" : "white",
-                        }}
-                      >
-                        {ball.isWicket ? "W" : ball.run}
-                      </div>
-                    ))}
-                  </div>
+                  {1 + index}
                 </div>
-              ))}
+                <div
+                  style={{
+                    width: "80%",
+                    height: "40px",
+                    textAlign: "center",
+                    padding: "5px 7px",
+                    display: "flex",
+                    gap: "10px",
+                    border: "1px solid gray",
+                    margin: "5px",
+                    height: "40px",
+                  }}
+                >
+                  {over.balls.map((ball, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "35px",
+                        height: "35px",
+                        border: "0.5px solid gray",
+                        borderRadius: "50%",
+                        backgroundColor: ball.isWicket
+                          ? "#f1361d"
+                          : ball.run === 0
+                          ? "white"
+                          : ball.run === 1 || ball.run === 2 || ball.run === 3
+                          ? "#b8b7b7"
+                          : ball.run === 4
+                          ? "#64dbd1"
+                          : ball.run === 6
+                          ? "#119e71"
+                          : "transparent",
+                        color: ball.run === 0 ? "black" : "white",
+                      }}
+                    >
+                      {ball.isWicket ? "W" : ball.run}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

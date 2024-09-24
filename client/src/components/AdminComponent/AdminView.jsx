@@ -19,12 +19,9 @@ export default function AdminView() {
     setOversData,
   } = useContext(ScoreContext);
 
-  const [showOptions, setShowOptions] = useState(false); // Show options on ball click
-  //   const url = "http://localhost:5001";
+  const [showOptions, setShowOptions] = useState(false);
   const url = process.env.URL;
   const ballOptionsRef = useRef();
-  //   console.log({score})
-  //   console.log(oversData);
 
   const fetchMatchData = async () => {
     try {
@@ -50,6 +47,8 @@ export default function AdminView() {
   const handleBallClick = async (run, isWicket) => {
     // Update score and wickets based on selection
     const updatedBalls = [...balls, { run, isWicket }];
+    const newScore = isWicket ? score : score + run;
+    const newWickets = isWicket ? wickets + 1 : wickets;
 
     if (isWicket) {
       setWickets(wickets + 1);
@@ -60,19 +59,8 @@ export default function AdminView() {
     // Store ball data
     const newBall = { run, isWicket };
     setBalls([...balls, newBall]);
-
-    // Move to next ball or next over
-    if (currentBall === 6) {
-      // Over complete
-      //setOversData([...oversData, [...balls, newBall]]); // Save over data with current ball
-      setOversData([...oversData, updatedBalls]);
-      setBalls([]); // Reset balls for next over
-      setCurrentBall(0); // Reset ball count
-      setOver(over + 1); // Move to next over
-    } else {
-      setBalls(updatedBalls);
-      setCurrentBall(currentBall + 1);
-    }
+    setBalls(updatedBalls);
+    setCurrentBall(currentBall + 1);
     try {
       const response = await fetch(
         `https://crickscore-1093.onrender.com/api/scores/match`,
@@ -80,10 +68,8 @@ export default function AdminView() {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            score,
-            wickets,
-            // currentBall: currentBall === 5 ? 0 : currentBall + 1,
-            // currentOver: currentBall === 5 ? over + 1 : over,
+            score: newScore,
+            wickets: newWickets,
             currentBall: currentBall + 1,
             currentOver: over,
             balls: updatedBalls,
@@ -92,7 +78,9 @@ export default function AdminView() {
       );
 
       const data = await response.json();
-      console.log("Match data updated:", data);
+      if (data.currentBall == 0) {
+        fetchMatchData();
+      }
     } catch (error) {
       console.error("Error updating match data:", error);
     }
@@ -100,7 +88,7 @@ export default function AdminView() {
     setShowOptions(false);
   };
   const handleCurrentBallClick = () => {
-    setShowOptions(true); // Show options on click
+    setShowOptions(true);
   };
 
   useEffect(() => {
@@ -112,17 +100,14 @@ export default function AdminView() {
         setShowOptions(false);
       }
     }
-    fetchMatchData(); //TODO: 22.
+    fetchMatchData();
 
-    // window.addEventListener("scroll", handleScroll); //TODO: scroll
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
-      // window.removeEventListener("scroll", handleScroll); //TODO:
     };
   }, [ballOptionsRef]);
-  //   console.log(oversData)
 
   return (
     <Layout>
@@ -134,7 +119,6 @@ export default function AdminView() {
             </h1>
 
             <h4 className="ovres-display">
-              {/* If currentBall is 6, show next over with ball 0 */}
               Over (
               {currentBall === 6 ? `${over + 1}.0` : `${over}.${currentBall}`})
             </h4>
@@ -147,7 +131,6 @@ export default function AdminView() {
                 {[...Array(6)].map((_, i) => (
                   <div
                     key={i}
-                    //   className={`ball ${i === currentBall ? 'active' : ''}`}
                     className={`ball ${
                       balls[i]
                         ? balls[i].isWicket
@@ -191,16 +174,6 @@ export default function AdminView() {
               </div>
             </div>
 
-            {currentBall === 6 && (
-              <button
-                className="over-complete-message"
-                onClick={fetchMatchData}
-                style={{ cursor: "pointer" }}
-              >
-                Update
-              </button>
-            )}
-
             {/* Show options when the current ball is clicked */}
             {showOptions && (
               <div className="run-ball-display">
@@ -219,166 +192,85 @@ export default function AdminView() {
             )}
           </div>
         </div>
-        {/* <div className="overs-layout">
-          <h4>Over Listings</h4>
-          <div className="over-listing">
-            <p className="overs-label">Overs</p>
-            <p className="runs-label">Runs</p>
-          </div>
-          <div className="overs-summary">
-            {oversData
-              .slice(0, -1)
-              // .reverse()
-              .map((over, index) => (
-                <div
-                  key={index}
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-around",
-                    gap: "20px",
-                    marginBottom: "5px",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: "15%",
-                      height: "40px",
-                      textAlign: "center",
-                      paddingTop: "8px",
-                      margin: "6px 0",
-                    }}
-                  >
-                    {++index}
-                  </div>
-                  <div
-                    style={{
-                      width: "80%",
-                      height: "40px",
-                      textAlign: "center",
-                      padding: "5px 7px",
-                      display: "flex",
-                      gap: "10px",
-                      border: "1px solid gray",
-                      margin: "5px",
-                      height: "40px",
-                    }}
-                  >
-                    {over.balls.map((ball, i) => (
-                      <div
-                        key={i}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          width: "35px",
-                          height: "35px",
-                          border: "0.5px solid gray",
-                          borderRadius: "50%",
-                          backgroundColor: ball.isWicket
-                            ? "#f1361d"
-                            : ball.run === 0
-                            ? "white"
-                            : ball.run === 1 || ball.run === 2 || ball.run === 3
-                            ? "#b8b7b7"
-                            : ball.run === 4
-                            ? "#64dbd1"
-                            : ball.run === 6
-                            ? "#119e71"
-                            : "transparent",
-                          color: ball.run === 0 ? "black" : "white",
-                        }}
-                      >
-                        {ball.isWicket ? "W" : ball.run}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div> */}
         <div className="overs-layout">
-  {oversData && oversData.length > 1 && (
-    <>
-      <h4>Over Listings</h4>
-      <div className="over-listing">
-        <p className="overs-label">Overs</p>
-        <p className="runs-label">Runs</p>
-      </div>
-    </>
-  )}
-  
-  <div className="overs-summary">
-            {oversData
-              .slice(0, -1)
-              // .reverse()
-              .map((over, index) => (
+          {oversData && oversData.length > 1 && (
+            <>
+              <h4>Over Listings</h4>
+              <div className="over-listing">
+                <p className="overs-label">Overs</p>
+                <p className="runs-label">Runs</p>
+              </div>
+            </>
+          )}
+
+          <div className="overs-summary">
+            {oversData.slice(0, -1).map((over, index) => (
+              <div
+                key={index}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-around",
+                  gap: "20px",
+                  marginBottom: "5px",
+                }}
+              >
                 <div
-                  key={index}
                   style={{
-                    display: "flex",
-                    justifyContent: "space-around",
-                    gap: "20px",
-                    marginBottom: "5px",
+                    width: "15%",
+                    height: "40px",
+                    textAlign: "center",
+                    paddingTop: "8px",
+                    margin: "6px 0",
                   }}
                 >
-                  <div
-                    style={{
-                      width: "15%",
-                      height: "40px",
-                      textAlign: "center",
-                      paddingTop: "8px",
-                      margin: "6px 0",
-                    }}
-                  >
-                    {++index}
-                  </div>
-                  <div
-                    style={{
-                      width: "80%",
-                      height: "40px",
-                      textAlign: "center",
-                      padding: "5px 7px",
-                      display: "flex",
-                      gap: "10px",
-                      border: "1px solid gray",
-                      margin: "5px",
-                      height: "40px",
-                    }}
-                  >
-                    {over.balls.map((ball, i) => (
-                      <div
-                        key={i}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          width: "35px",
-                          height: "35px",
-                          border: "0.5px solid gray",
-                          borderRadius: "50%",
-                          backgroundColor: ball.isWicket
-                            ? "#f1361d"
-                            : ball.run === 0
-                            ? "white"
-                            : ball.run === 1 || ball.run === 2 || ball.run === 3
-                            ? "#b8b7b7"
-                            : ball.run === 4
-                            ? "#64dbd1"
-                            : ball.run === 6
-                            ? "#119e71"
-                            : "transparent",
-                          color: ball.run === 0 ? "black" : "white",
-                        }}
-                      >
-                        {ball.isWicket ? "W" : ball.run}
-                      </div>
-                    ))}
-                  </div>
+                  {1 + index}
                 </div>
-              ))}
+                <div
+                  style={{
+                    width: "80%",
+                    height: "40px",
+                    textAlign: "center",
+                    padding: "5px 7px",
+                    display: "flex",
+                    gap: "10px",
+                    border: "1px solid gray",
+                    margin: "5px",
+                    height: "40px",
+                  }}
+                >
+                  {over.balls.map((ball, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "35px",
+                        height: "35px",
+                        border: "0.5px solid gray",
+                        borderRadius: "50%",
+                        backgroundColor: ball.isWicket
+                          ? "#f1361d"
+                          : ball.run === 0
+                          ? "white"
+                          : ball.run === 1 || ball.run === 2 || ball.run === 3
+                          ? "#b8b7b7"
+                          : ball.run === 4
+                          ? "#64dbd1"
+                          : ball.run === 6
+                          ? "#119e71"
+                          : "transparent",
+                        color: ball.run === 0 ? "black" : "white",
+                      }}
+                    >
+                      {ball.isWicket ? "W" : ball.run}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
- </div>
-
+        </div>
       </div>
     </Layout>
   );

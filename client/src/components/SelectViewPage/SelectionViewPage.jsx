@@ -1,6 +1,6 @@
 import React from 'react'
 import './select.css';
-import {Navigate, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 export default function SelectionViewPage() {
     const navigate = useNavigate();
@@ -17,8 +17,7 @@ export default function SelectionViewPage() {
             <div className='role-option' onClick={()=> handleSelect('admin')}>Admin</div>
             <div className='role-option' onClick={()=> handleSelect('user')}>User</div>
           </div>
-        </div>
-        
+        </div>     
       </div>
         
     </div>

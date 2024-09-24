@@ -30,8 +30,8 @@ app.use(
 );
 
 app.use(express.json());
-
 app.set("io", io);
+
 // MongoDB Connection
 connectDB();
 

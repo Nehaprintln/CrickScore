@@ -51,7 +51,6 @@
     border: 0.5px solid #878585;
     cursor: pointer;
     font-size: 13px;
-    /* font-weight: bold; */
   }
   
   .ball-options button:nth-child(1) { 
@@ -134,13 +133,11 @@
 .over-listing{
   display: flex;
   justify-content: space-around;
-  /* gap: 10px; */
 }
 .overs-label{
   width: 10%;
   margin-top: 10px;
   margin-left: -3px;
-  /* border: 1px solid red; */
   font-weight: 500;
 
 }
@@ -149,7 +146,6 @@
   margin-top: 10px;
   margin-left: 20px;
   font-weight: 500;
-  /* border: 1px solid red; */
 }
 .overs-summary{
   margin-top: -15px;

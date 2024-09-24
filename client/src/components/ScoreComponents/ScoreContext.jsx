@@ -1,5 +1,5 @@
 import React from 'react'
-import { Children, createContext, useState } from "react";
+import {createContext, useState } from "react";
 
 export const ScoreContext = createContext();
 
@@ -8,10 +8,10 @@ export default function ScoreProvider({children}) {
 
     const [score, setScore] = useState(0);
     const [wickets, setWickets] = useState(0);
-    const [over, setOver] = useState(0); // current over
-    const [currentBall, setCurrentBall] = useState(0); // current ball in over
-    const [balls, setBalls] = useState([]); // Store data for balls in current over
-    const [oversData, setOversData] = useState([]); // Store data for all overs
+    const [over, setOver] = useState(0); 
+    const [currentBall, setCurrentBall] = useState(0); 
+    const [balls, setBalls] = useState([]); 
+    const [oversData, setOversData] = useState([]); 
 
   return (
     <ScoreContext.Provider value={{
