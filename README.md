@@ -36,11 +36,19 @@ This is a real-time cricket score tracking app where the admin can update match 
 3. **Install Dependencies**
 4. **Start the Application**:
      To start the backend server, navigate to the backend directory:
-      cd backend
-      node server.js
+     
+      For Eg:
+
+             cd backend
+
+             node server.js
 
      To start the frontend application, open a new terminal window and navigate to the frontend directory:
-      cd frontend
-      npm start
+      
+     For Eg:
+
+            cd frontend
+
+            npm start
 
   
